@@ -6,4 +6,5 @@ Gem::Specification.new do |spec|
   spec.author   = 'Caio Chassot'
   spec.email    = 'dev@caiochassot.com'
   spec.files    = Dir[*%w( MIT-LICENSE README.markdown lib/**/* )]
+  spec.add_dependency "terminator", ">= 0.4.4"
 end

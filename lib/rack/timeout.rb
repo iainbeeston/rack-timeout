@@ -1,5 +1,5 @@
-require RUBY_VERSION < '1.9' && RUBY_PLATFORM != "java" ? 'system_timer' : 'timeout'
-SystemTimer ||= Timeout
+require 'timeout'
+require 'terminator'
 
 module Rack
   class Timeout
@@ -13,7 +13,10 @@ module Rack
     end
 
     def call(env)
-      SystemTimer.timeout(self.class.timeout, ::Timeout::Error) { @app.call(env) }
+      result = nil
+      custom_trap = lambda { eval("raise Timeout::Error") }
+      Terminator.terminate(:seconds => self.class.timeout, :trap => custom_trap) { result = @app.call(env) }
+      return result
     end
 
   end
